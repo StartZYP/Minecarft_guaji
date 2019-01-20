@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="guaji:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/guaji_jar</output-path>
+    <root id="root">
+      <element id="archive" name="guaji.jar">
+        <element id="module-output" name="guaji" />
+      </element>
+      <element id="library" level="project" name="craftbukkit-1.7.10-R0.1-20140808.005431-8" />
+      <element id="library" level="project" name="Vault-1.4.1" />
+    </root>
+  </artifact>
+</component>

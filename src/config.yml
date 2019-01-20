@@ -1,0 +1,9 @@
+guaji:
+  3:
+    xp: 300
+    money: 6000
+    DoCmd: give [Player] 15 1
+  8:
+    xp: 300
+    money: 8000
+    DoCmd: 0

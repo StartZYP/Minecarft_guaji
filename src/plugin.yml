@@ -1,0 +1,5 @@
+name: Guaji
+main: com.qq44920040.Minecraft.guaji.guajiMain
+version: 1.0
+commands:
+  guaji:
