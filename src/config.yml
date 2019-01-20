@@ -7,3 +7,4 @@ guaji:
     xp: 300
     money: 8000
     DoCmd: 0
+Msg: '您挂机时间为[TimeGuaJi]'

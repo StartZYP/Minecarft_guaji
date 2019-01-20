@@ -1,6 +1,8 @@
 package com.qq44920040.Minecraft.guaji;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +18,7 @@ import static com.qq44920040.Minecraft.guaji.Eco.setupEconomy;
 public class guajiMain extends JavaPlugin implements Listener {
     private static Map<UUID,String[]> PlayerList=new HashMap<>();
     private Map<Integer,String[]> NeedTime=new HashMap<>();
+    private String Msg;
     @Override
     public void onEnable() {
         ReloadConfig();
@@ -36,7 +39,7 @@ public class guajiMain extends JavaPlugin implements Listener {
         }else {
             System.out.println("经济插件没有装");
         }
-
+        Msg = getConfig().getString("Msg");
         Set<String> mines = getConfig().getConfigurationSection("guaji").getKeys(false);
         for (String temp:mines){
             String xp = getConfig().getString("guaji."+temp+".xp");
@@ -45,6 +48,16 @@ public class guajiMain extends JavaPlugin implements Listener {
             NeedTime.put(Integer.parseInt(temp),new String[]{xp,money,DoCmd});
         }
     }
+
+//    @Override
+//    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+//        if (label.equalsIgnoreCase("guaji")){
+//            if (args.length==1&args[0].equalsIgnoreCase("fsdhfiwseuifhwiuefhwe")){
+//
+//            }
+//        }
+//        return super.onCommand(sender, command, label, args);
+//    }
 
     private void ScanThread(){
         new BukkitRunnable(){
@@ -57,16 +70,17 @@ public class guajiMain extends JavaPlugin implements Listener {
                         if (Bukkit.getOfflinePlayer(PlayerUUid).isOnline()){
                             String[] TempValue = Entryvalue.getValue();
                             Player onlinePlayer = Bukkit.getPlayer(PlayerUUid);
-                            if (TempValue[0].equalsIgnoreCase(TempValue[1])){
+                            if (TempValue[0].equalsIgnoreCase(onlinePlayer.getLocation().toString())){
                                 System.out.println("两次位置相同");
-                                long Timelong = Long.valueOf(TempValue[2]);
+                                long Timelong = Long.valueOf(TempValue[1]);
                                 int havetime = (int)(new Date().getTime()-Timelong)/1000/60;
+                                PlayerGiveGift(havetime,onlinePlayer);
                                 System.out.println(havetime);
-
+                                onlinePlayer.sendMessage(Msg.replace("[TimeGuaJi]",String.valueOf(havetime)));
                             }else {
                                 System.out.println("两次位置不一样，进行位置更新");
-                                TempValue[1]=TempValue[0];
                                 TempValue[0]=onlinePlayer.getLocation().toString();
+                                TempValue[1]=String.valueOf(new Date().getTime());
                                 PlayerList.remove(PlayerUUid);
                                 PlayerList.put(PlayerUUid,TempValue);
                             }
@@ -76,7 +90,7 @@ public class guajiMain extends JavaPlugin implements Listener {
                     }
                 }
             }
-        }.runTaskTimer(this,10*20L,60*20L);
+        }.runTaskTimer(this,20L,55*20L);
     }
 
 
@@ -88,9 +102,13 @@ public class guajiMain extends JavaPlugin implements Listener {
             if (mine==Entryvalue.getKey()){
                 String[] TempVaule = Entryvalue.getValue();
                 Player.giveExp(Integer.parseInt(TempVaule[0]));
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),TempVaule[2]);
                 Eco.give(Player.getUniqueId(),Integer.parseInt(TempVaule[1]));
-                System.out.println("命令执行成功");
+                if (!TempVaule[1].equalsIgnoreCase("0")){
+                    System.out.println("命令执行成功");
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),TempVaule[2].replace("[Player]",Player.getName()));
+                }else {
+                    System.out.println("不执行命令");
+                }
             }
         }
     }
@@ -106,7 +124,7 @@ public class guajiMain extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         String location = player.getLocation().toString();
         UUID playeruuid= player.getUniqueId();
-        PlayerList.put(playeruuid,new String[]{location,"1",String.valueOf(new Date().getTime())});
+        PlayerList.put(playeruuid,new String[]{location,String.valueOf(new Date().getTime())});
         System.out.println("玩家进入");
     }
 }
